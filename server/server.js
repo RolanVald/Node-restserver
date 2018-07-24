@@ -1,10 +1,17 @@
+// configuraciones para la aplicacion
 require('./config/config');
-
+//express
 const express = require('express');
-const app = express();
-
+//mongoose
+const mongoose = require('mongoose');
 //body parser
 const bodyParser = require('body-parser');
+
+
+const app = express();
+
+
+
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -13,50 +20,19 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 
-// -----------------------------------------------
+app.use(require('./routes/usuario'));
 
 
-// ejemplo de peticion get
-app.get('/usuario', (req, res)=> {
-    res.send('ge tUsuario');
-})
 
-// ejemplo de peticion post
-app.post('/usuario', (req, res)=> {
-
-    let body = req.body;
-
-    // si no esta incluido el  nombre, se manda un stautus 400
-    if( body.nombre === undefined){
-        res.status(400).json({
-            ok: false,
-            mensaje: 'El nombre es necesario'
-        });
-    }else{
-        res.json({
-            persona:body
-        });
+// conexion a la base de datos
+mongoose.connect(process.env.URLDB, ( err ) =>{
+    if( err ){
+        throw err;
     }
-
-})
-
-// ejemplo de peticion put, como para actualizar
-app.put('/usuario/:id', (req, res)=> {
-
-    let id = req.params.id;
-
-    res.json({
-        id
-    });
-})
-
-// ejemplo de peticion post
-app.delete('/usuario', (req, res)=> {
-    res.send('delete Usuario');
-})
-
-
-
+    else{
+        console.log('Base de datos online');
+    }
+});
 
 
 
