@@ -5,10 +5,12 @@ const _=require('underscore');
 
 // requres para el modelo del usuario
 const Usuario = require('../models/usuario');
+//requiriendo el archivo de verificacion de token
+const { verificaToken,verificaAdminRole } = require('../middlewares/autenticacion');
 
 // ejemplo de peticion get
-app.get('/usuario', (req, res)=> {
-    
+app.get('/usuario', verificaToken ,(req, res)=> {
+
     let desde = req.query.desde || 0;
     desde = Number(desde);
 
@@ -41,8 +43,8 @@ app.get('/usuario', (req, res)=> {
 
 });
 
-// ejemplo de peticion post
-app.post('/usuario', (req, res)=> {
+// ejemplo de peticion post- CREAR USUARIO
+app.post('/usuario', [verificaToken,verificaAdminRole] ,(req, res)=> {
 
     let body = req.body;
 
@@ -73,7 +75,7 @@ app.post('/usuario', (req, res)=> {
 });
 
 // ejemplo de peticion put, como para actualizar
-app.put('/usuario/:id', (req, res)=> {
+app.put('/usuario/:id', [verificaToken,verificaAdminRole] ,(req, res)=> {
 
     let id = req.params.id;
     let body = _.pick(req.body, ['nombre','email','img','role','estado']);
@@ -100,7 +102,7 @@ app.put('/usuario/:id', (req, res)=> {
 })
 
 // ejemplo de peticion post
-app.delete('/usuario/:id', (req, res)=> {
+app.delete('/usuario/:id', [verificaToken,verificaAdminRole] ,(req, res)=> {
     
     let id = req.params.id;
     let cambiaEdo = {
