@@ -14,4 +14,13 @@ app.use( require('./categoria'));
 // para usar las rutas de productos
 app.use( require('./producto'));
 
+// para las rutas de uploads
+app.use(require('./ulpload'));
+
+// para las rutas de imagenes
+app.use(require('./imagenes'));
+
+
+
+
 module.exports = app;
